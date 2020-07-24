@@ -1,8 +1,8 @@
 from flask import Flask, render_template, request
 from itunesSearch import search_pod
 
-app = Flask(__name__)
 pods = dict()
+app = Flask(__name__)
 
 @app.route('/', methods=['GET', 'POST'])
 def index():
