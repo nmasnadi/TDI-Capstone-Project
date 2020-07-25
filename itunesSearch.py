@@ -20,4 +20,4 @@ def search_pod(key_word):
     testUrl = itunesUrl + key_word #urllib.parse.quote(key_word)
     r = requests.get(testUrl)
     res = json.loads(r.text)['results'][0]
-    return res['collectionName'], res['artworkUrl60']
+    return res['collectionName'], res['artworkUrl600']
