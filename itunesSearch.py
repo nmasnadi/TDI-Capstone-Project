@@ -1,4 +1,3 @@
-# import urllib.parse
 import requests
 import json
 
@@ -17,7 +16,10 @@ def search_pod(key_word):
             requestString = requestString + '&' + paramString
 
     itunesUrl = itunesUrl + requestString + '&term='
-    testUrl = itunesUrl + key_word #urllib.parse.quote(key_word)
+    testUrl = itunesUrl + key_word
     r = requests.get(testUrl)
-    res = json.loads(r.text)['results'][0]
-    return res['collectionName'], res['artworkUrl600']
+    res = json.loads(r.text)['results']
+    itunes_ids = [r['collectionId'] for r in res]
+    itunes_titles = [r['collectionName'] for r in res]
+    itunes_artwork = [r['artworkUrl600'] for r in res]
+    return itunes_ids, itunes_titles, itunes_artwork

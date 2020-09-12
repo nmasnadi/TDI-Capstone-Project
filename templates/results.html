@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+  <meta name="description" content="Skeleton application demoing Heroku and Flask integration.">
+  <meta name="author" content="@nmasnadi">
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/spacelab/bootstrap.min.css">
+  <title>Stock Price Plotter</title>
+  {{ resources|safe }}
+
+</head>
+  <body>
+
+    <!-- <div class="row align-items-center justify-content-center">
+      <h1>Daily Stock Price</h1>
+    </div> -->
+
+    <!-- <div class="row align-items-center justify-content-center">
+      <form method = "POST">
+        <label for="ticker_symbol"><b>Ticker Symbol</b></label><br>
+        <input type="text" id="ticker_symbol" name="ticker_symbol" value=""><br>
+
+        <input type="checkbox" id="Open" name="Open" value="Open">
+        <label for="Open">Open</label>
+        <input type="checkbox" id="High" name="High" value="High">
+        <label for="High">High</label>
+        <input type="checkbox" id="Low" name="Low" value="Low">
+        <label for="Low">Low</label>
+        <input type="checkbox" id="Close" name="Close" value="Close" checked = true>
+        <label for="Close">Close</label><br>
+
+        <input type="radio" id="thrity" name="num_days" value="30" checked = true>
+        <label for="thrity">30 days </label>
+        <input type="radio" id="sixty" name="num_days" value="60">
+        <label for="sixty">60 days </label>
+        <input type="radio" id="ninety" name="num_days" value="90">
+        <label for="ninety">90 days</label><br>
+
+        <input type="submit" value="Submit">
+      </form>
+    </div> -->
+    <div class="container">
+      <div class="col-md-10 pull-right" >
+        <div id="scatter-container">
+          <!-- <div id="scatter-title">
+            <h3>Explore the top 100 podcasts</h3>
+          </div> -->
+          <div  id="scatterplot" style="margin-top:30px">
+            {{ cluster_plot|safe }}
+          </div>
+        </div>
+      </div>
+      <!-- <div class="row align-items-center justify-content-center">
+        {{ cluster_plot|safe }}
+      </div> -->
+    </div>
+    <!-- <center>
+    <div style="max-width: 600px;">
+      {{ error|safe}}
+    </div>
+    </center> -->
+
+  </body>
+</html>
