@@ -6,8 +6,10 @@
   <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"> -->
   <meta name="description" content="Skeleton application demoing Heroku and Flask integration.">
   <meta name="author" content="@nmasnadi">
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/spacelab/bootstrap.min.css">
-  <title>Stock Price Plotter</title>
+  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/spacelab/bootstrap.min.css"> -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
+
+  <title>Podcast Recommender</title>
   {{ resources|safe }}
 
 </head>
@@ -41,20 +43,35 @@
         <input type="submit" value="Submit">
       </form>
     </div> -->
-    <div class="container">
-      <div class="col-md-10 pull-right" >
-        <div id="scatter-container">
+    <div class="container-fluid">
+      <div class = "row">
+      <div class="col-md-6" >
           <!-- <div id="scatter-title">
             <h3>Explore the top 100 podcasts</h3>
           </div> -->
-          <div  id="scatterplot" style="margin-top:30px">
-            {{ cluster_plot|safe }}
-          </div>
-        </div>
+          {{ cluster_plot|safe }}
       </div>
-      <!-- <div class="row align-items-center justify-content-center">
-        {{ cluster_plot|safe }}
-      </div> -->
+      <div class="col-md-6">
+        <h3>Podcasts Like {{ pod['title'] }}:</h3>
+        <table class="table table-hover">
+          <tbody>
+            <tr><th>Title</th><th>Genre</th><th>Similarity</th></tr>
+            {% for result in pod_recommendations %}
+            <tr id="{{result['id']}}">
+              <!-- <td class="vert-align"><img src="{{result['artwork_url100']}}", height="50", width="50"></td> -->
+              <td class="vert-align">{{ result['title'] }}</td>
+              <td class="vert-align">{{ result['genre']}}</td>
+              <td class="vert-align">{{ result['similarity']}}</td>
+              <!-- <td class="vert-align"><a href="{{ result['view_url'] }}" class="btn btn-block btn-xs btn-default" target="_blank"><span class="glyphicon glyphicon-headphones"></span> Listen on iTunes</a> -->
+
+              <!-- <a href="../output?id={{ result['id']}}" class="btn btn-block btn-xs btn-default"><span class="glyphicon glyphicon-retweet"></span> View Similar</a> -->
+              </td>
+            </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+      </div>
+    </div>
     </div>
     <!-- <center>
     <div style="max-width: 600px;">

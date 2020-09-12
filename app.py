@@ -1,5 +1,5 @@
 from flask import Flask, render_template, request, redirect, url_for
-from itunesSearch import search_pod
+from itunesSearch import search_pod, get_recommendations
 from bokeh.embed import components
 from bokeh.resources import CDN
 
@@ -15,17 +15,11 @@ def index():
 
 @app.route('/results/<search_term>', methods=['GET', 'POST'])
 def show_results(search_term):
-    # itunes_ids, itunes_titles, itunes_artwork = search_pod(search_term)
-    # print(itunes_titles[0] + ": " + str(itunes_ids[0]))
-    # clusters = cluster_plot()
-    # script, div = components(clusters)
-
-    # pods_mean_vec = pd.read_pickle("pods_mean_vec_description.pkl")
-    # t = pods_mean_vec[["titles", "descriptions", "genre", "subgenre"]][:10]
-    # return render_template("results.html", script = t.to_html())
+    pod, pod_recommendations = get_recommendations(search_term, n_rec = 10)
     f = open("clusters.html", "r")
     cluster_plot = f.read()
     return render_template("results.html", cluster_plot = cluster_plot, \
+    pod = pod, pod_recommendations = pod_recommendations, \
     resources = CDN.render())
 
 if __name__ == '__main__':
