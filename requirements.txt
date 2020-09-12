@@ -3,3 +3,6 @@ flask==1.1.1
 requests==2.22.0
 urllib3==1.25.8
 json5==0.9.1
+bokeh==1.4.0
+numpy==1.18.1
+pandas==1.0.1

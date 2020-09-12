@@ -1,10 +1,7 @@
 from flask import Flask, render_template, request, redirect, url_for
 from itunesSearch import search_pod
-# from plotting import cluster_plot
-# from bokeh.plotting import show
 from bokeh.embed import components
 from bokeh.resources import CDN
-# import pandas as pd
 
 app = Flask(__name__)
 
