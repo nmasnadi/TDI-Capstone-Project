@@ -3,10 +3,8 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <!-- <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=yes"> -->
   <meta name="description" content="Skeleton application demoing Heroku and Flask integration.">
   <meta name="author" content="@nmasnadi">
-  <!-- <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootswatch/4.5.0/spacelab/bootstrap.min.css"> -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
 
   <title>Podcast Recommender</title>
@@ -14,70 +12,28 @@
 
 </head>
   <body>
-
-    <!-- <div class="row align-items-center justify-content-center">
-      <h1>Daily Stock Price</h1>
-    </div> -->
-
-    <!-- <div class="row align-items-center justify-content-center">
-      <form method = "POST">
-        <label for="ticker_symbol"><b>Ticker Symbol</b></label><br>
-        <input type="text" id="ticker_symbol" name="ticker_symbol" value=""><br>
-
-        <input type="checkbox" id="Open" name="Open" value="Open">
-        <label for="Open">Open</label>
-        <input type="checkbox" id="High" name="High" value="High">
-        <label for="High">High</label>
-        <input type="checkbox" id="Low" name="Low" value="Low">
-        <label for="Low">Low</label>
-        <input type="checkbox" id="Close" name="Close" value="Close" checked = true>
-        <label for="Close">Close</label><br>
-
-        <input type="radio" id="thrity" name="num_days" value="30" checked = true>
-        <label for="thrity">30 days </label>
-        <input type="radio" id="sixty" name="num_days" value="60">
-        <label for="sixty">60 days </label>
-        <input type="radio" id="ninety" name="num_days" value="90">
-        <label for="ninety">90 days</label><br>
-
-        <input type="submit" value="Submit">
-      </form>
-    </div> -->
     <div class="container-fluid">
       <div class = "row">
       <div class="col-md-6" >
-          <!-- <div id="scatter-title">
-            <h3>Explore the top 100 podcasts</h3>
-          </div> -->
           {{ cluster_plot|safe }}
       </div>
-      <div class="col-md-6">
+{#      <div class="col-md-6">
         <h3>Podcasts Like {{ pod['title'] }}:</h3>
         <table class="table table-hover">
           <tbody>
             <tr><th>Title</th><th>Genre</th><th>Similarity</th></tr>
             {% for result in pod_recommendations %}
             <tr id="{{result['id']}}">
-              <!-- <td class="vert-align"><img src="{{result['artwork_url100']}}", height="50", width="50"></td> -->
               <td class="vert-align">{{ result['title'] }}</td>
               <td class="vert-align">{{ result['genre']}}</td>
               <td class="vert-align">{{ result['similarity']}}</td>
-              <!-- <td class="vert-align"><a href="{{ result['view_url'] }}" class="btn btn-block btn-xs btn-default" target="_blank"><span class="glyphicon glyphicon-headphones"></span> Listen on iTunes</a> -->
-
-              <!-- <a href="../output?id={{ result['id']}}" class="btn btn-block btn-xs btn-default"><span class="glyphicon glyphicon-retweet"></span> View Similar</a> -->
               </td>
             </tr>
               {% endfor %}
             </tbody>
           </table>
-      </div>
+      </div>#}
     </div>
     </div>
-    <!-- <center>
-    <div style="max-width: 600px;">
-      {{ error|safe}}
-    </div>
-    </center> -->
-
   </body>
 </html>
