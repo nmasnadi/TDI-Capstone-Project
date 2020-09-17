@@ -19,9 +19,12 @@
         <img src = "{{ pod['artwork'] | safe }}" alt="{{ pod['title'] | safe }}" class="rounded" width="100px">
         <table class="table table-hover">
           <tbody>
-            <tr><th>Title</th><th>Genre</th><th>Subgenre</th><th>Similarity</th></tr>
+            <tr><th></th><th>Title</th><th>Genre</th><th>Subgenre</th><th>Similarity</th></tr>
             {% for result in pod_recommendations %}
               <tr id="{{result['itunes_id']}}">
+                <td class="vert-align">
+                  <img src = "{{ result['artwork_url'] | safe }}" class="rounded" width="40px">
+                </td>
                 <td class="vert-align">{{ result['title'] }}</td>
                 <td class="vert-align">{{ result['genre']}}</td>
                 <td class="vert-align">{{ result['subgenre']}}</td>
