@@ -23,12 +23,13 @@ def index():
 
 @app.route('/results/<search_term>', methods=['GET', 'POST'])
 def show_results(search_term):
-    pods = search_pod(search_term)
-    recs = get_recommendations(pods[0], cursor)
+    pod = search_pod(search_term, cursor)
+    print(pod)
+    recs = get_recommendations(pod, cursor)
     f = open("clusters.html", "r")
     cluster_plot = f.read()
     return render_template("results.html", cluster_plot = cluster_plot, \
-    pod = pods[0], \
+    pod = pod, \
     pod_recommendations = recs[:10], \
     resources = CDN.render())
 

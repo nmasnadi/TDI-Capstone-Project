@@ -3,7 +3,7 @@ import json
 import pandas as pd
 import numpy as np
 
-def search_pod(key_word):
+def search_pod(key_word, cursor):
     itunesUrl = 'https://itunes.apple.com/search?'
     parameters = {}
     parameters['entity'] = 'podcast'
@@ -21,10 +21,23 @@ def search_pod(key_word):
     testUrl = itunesUrl + key_word
     r = requests.get(testUrl)
     res = json.loads(r.text)['results']
-    pods = [{"id":r['collectionId'],
-            "title":r['collectionName'],
-            "artwork":r['artworkUrl600']} for r in res]
-    return pods
+    res = res[0]
+
+    itunes_id = res['collectionId']
+    query = """
+    SELECT titles, descriptions, genre, subgenre, artwork_url
+    FROM all_pods
+    WHERE itunes_id = %s;"""
+    cursor.execute(query, (str(itunes_id), ))
+    match = cursor.fetchone()
+
+    pod = {"id":itunes_id,
+            "title":match[0],
+            "description":match[1],
+            "genre":match[2],
+            "subgenre":match[3],
+            "artwork":match[4]}
+    return pod
 
 def get_recommendations(pod, cursor):
     itunes_id = pod["id"]
