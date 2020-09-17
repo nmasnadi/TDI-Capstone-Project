@@ -15,9 +15,9 @@
     <div class="container-fluid">
       <div class = "row justify-content-md-center">
       <div class="col-md-2">
-        <h3>{{ pod['title'] }}:</h3>
+        <!-- <h3>{{ pod['title'] }}:</h3> -->
         <img src = "{{ pod['artwork'] | safe }}" alt="{{ pod['title'] | safe }}" class="rounded" width="100px">
-        <h4>{{ pod['description'] }}</h4>
+        <!-- <h4>{{ pod['description'] }}</h4> -->
 {#}        <table class="table table-hover">
           <tbody>
             <tr><th>Title</th><th>Genre</th><th>Similarity</th></tr>
@@ -32,7 +32,7 @@
             </tbody>
           </table>#}
       </div>
-      <div class="col-md-6" >
+      <div class="col-md-8" >
           {{ cluster_plot|safe }}
       </div>
     </div>
