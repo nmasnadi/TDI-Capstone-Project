@@ -2,8 +2,6 @@ import requests
 import json
 import pandas as pd
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
-# from bs4 import BeautifulSoup
 
 def search_pod(key_word):
     itunesUrl = 'https://itunes.apple.com/search?'
@@ -26,19 +24,58 @@ def search_pod(key_word):
     pods = [{"id":r['collectionId'],
             "title":r['collectionName'],
             "artwork":r['artworkUrl600']} for r in res]
-    # itunes_ids = [r['collectionId'] for r in res]
-    # # itunes_titles = [r['collectionName'] for r in res]
-    # # itunes_artwork = [r['artworkUrl600'] for r in res]
-    # base_url = "https://podcasts.apple.com/podcast/id"
-    # itunes_descriptions = []
-    # for _id in itunes_ids:
-    #     url = base_url + str(_id)
-    #     req = requests.get(url)
-    #     soup = BeautifulSoup(req.text, features="lxml")
-    #     description = soup.find('section', \
-    #         attrs={"class":"product-hero-desc__section"}).text
-    #     itunes_descriptions.append(" ".join(description.split()))
-    #
-    # for i in range(len(pods)):
-    #     pods[i]['description'] = itunes_descriptions[i]
     return pods
+
+def get_recommendations(pod, cursor):
+    itunes_id = pod["id"]
+    print(itunes_id)
+    query = \
+    """SELECT match_id, score
+    FROM all_matches_meanvec
+    WHERE itunes_id = %s
+    ORDER BY score DESC;"""
+    cursor.execute(query, (str(itunes_id), ))
+    res = cursor.fetchall()
+    match_ids = [str(r[0]) for r in res]
+    scores = {str(r[0]):r[1] for r in res}
+
+    query = """
+    SELECT itunes_id, titles, descriptions, genre, subgenre, artwork_url
+    FROM all_pods
+    WHERE itunes_id IN %s;"""
+    cursor.execute(query, (tuple(match_ids),))
+    matches = cursor.fetchall()
+
+    results = [{"itunes_id": str(m[0]),
+                "title": m[1],
+                "description": m[2],
+                "genre": m[3],
+                "subgenre": m[4],
+                "artwork_url": m[5]} for i, m in enumerate(matches)]
+    sc = np.zeros(len(scores))
+    for i, r in enumerate(results):
+        r["similarity"] = scores[r["itunes_id"]]
+        sc[i] = scores[r["itunes_id"]]
+    idx = np.argsort(sc)[::-1]
+    temp = []
+    for i in idx:
+        temp.append(results[i])
+    results = temp
+
+    # title = []
+    # description = []
+    # genre = []
+    # subgenre = []
+    # artwork_url = []
+    # for m in matches:
+    #     title.append(m[0])
+    #     description.append(m[1])
+    #     genre.append(m[2])
+    #     subgenre.append(m[3])
+    #     artwork_url.append(m[4])
+    # results = pd.DataFrame({"itunes_id":match_ids,
+    #     "title":title, "description":description,
+    #     "genre":genre, "subgenre":subgenre,
+    #     "artwork_url":artwork_url,
+    #     "similarity":scores})
+    return results
