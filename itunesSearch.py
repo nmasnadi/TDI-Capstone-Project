@@ -51,7 +51,8 @@ def get_recommendations(pod, cursor):
                 "description": m[2],
                 "genre": m[3],
                 "subgenre": m[4],
-                "artwork_url": m[5]} for i, m in enumerate(matches)]
+                "artwork_url": m[5].replace("600x600","100x100")}
+                for i, m in enumerate(matches)]
     sc = np.zeros(len(scores))
     for i, r in enumerate(results):
         r["similarity"] = scores[r["itunes_id"]]
