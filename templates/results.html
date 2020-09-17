@@ -21,14 +21,14 @@
           <tbody>
             <tr><th>Title</th><th>Genre</th><th>Subgenre</th><th>Similarity</th></tr>
             {% for result in pod_recommendations %}
-            <tr id="{{result['itunes_id']}}">
-              <td class="vert-align">{{ result['title'] }}</td>
-              <td class="vert-align">{{ result['genre']}}</td>
-              <td class="vert-align">{{ result['subgenre']}}</td>
-              <td class="vert-align">{{ result['similarity']}}</td>
-              </td>
-            </tr>
-              {% endfor %}
+              <tr id="{{result['itunes_id']}}">
+                <td class="vert-align">{{ result['title'] }}</td>
+                <td class="vert-align">{{ result['genre']}}</td>
+                <td class="vert-align">{{ result['subgenre']}}</td>
+                <td class="vert-align">{{ result['similarity']}}</td>
+                </td>
+              </tr>
+            {% endfor %}
             </tbody>
           </table>
       </div>
