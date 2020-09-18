@@ -21,7 +21,7 @@ def index():
     else:
         return render_template("index.html")
 
-@app.route('/results?<search_term>', methods=['GET', 'POST'])
+@app.route('/term=<search_term>', methods=['GET', 'POST'])
 def show_results(search_term):
     pod = search_pod(search_term, cursor)
     recs = get_recommendations(pod, cursor)
@@ -29,21 +29,20 @@ def show_results(search_term):
     cluster_plot = f.read()
     return render_template("results.html", cluster_plot = cluster_plot, \
     pod = pod, \
-    pod_recommendations = recs[:10], \
+    pod_recommendations = recs, \
     offset = 0, \
     resources = CDN.render())
 
 @app.route('/itunes_id=<itunes_id>&offset=<offset>', methods=['GET', 'POST'])
 def show_results_id(itunes_id, offset = 0):
-    if offset:
-        offset = int(offset)
+    offset = int(offset)
     pod = search_pod(None, cursor, itunes_id)
     recs = get_recommendations(pod, cursor)
     f = open("clusters.html", "r")
     cluster_plot = f.read()
     return render_template("results.html", cluster_plot = cluster_plot, \
     pod = pod, \
-    pod_recommendations = recs[offset:offset+10], \
+    pod_recommendations = recs, \
     offset = offset, \
     resources = CDN.render())
 

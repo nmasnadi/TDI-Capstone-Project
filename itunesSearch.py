@@ -5,24 +5,10 @@ import numpy as np
 
 def search_pod(key_word, cursor, itunes_id = None):
     if itunes_id == None:
-        itunesUrl = 'https://itunes.apple.com/search?'
-        parameters = {}
-        parameters['entity'] = 'podcast'
-        parameters['attribute'] = 'titleTerm'
-
-        requestString = ''
-        for param in parameters:
-            paramString = param + '=' + parameters[param]
-            if len(requestString) == 0:
-                requestString = paramString
-            else:
-                requestString = requestString + '&' + paramString
-
-        itunesUrl = itunesUrl + requestString + '&term='
+        itunesUrl = "https://itunes.apple.com/search?entity=podcast&attribute=titleTerm&term="
         testUrl = itunesUrl + key_word
         r = requests.get(testUrl)
-        res = json.loads(r.text)['results']
-        res = res[0]
+        res = json.loads(r.text)['results'][0]
         itunes_id = res['collectionId']
 
     query = """
@@ -42,16 +28,22 @@ def search_pod(key_word, cursor, itunes_id = None):
 
 def get_recommendations(pod, cursor):
     itunes_id = pod["id"]
-    print(itunes_id)
     query = \
     """SELECT match_id, score
     FROM all_matches_meanvec
-    WHERE itunes_id = %s
-    ORDER BY score DESC;"""
+    WHERE itunes_id = %s;"""
+    # query = \
+    # """SELECT match_id, score
+    # FROM all_matches_meanvec
+    # WHERE itunes_id = %s
+    # ORDER BY score DESC;"""
     cursor.execute(query, (str(itunes_id), ))
-    res = cursor.fetchall()
-    match_ids = [str(r[0]) for r in res]
-    scores = {str(r[0]):r[1] for r in res}
+    res = cursor.fetchone()
+    match_ids = res[0].split(',')
+    scores_temp = res[1].split(',')
+    scores = dict()
+    for m, s in zip(match_ids, scores_temp):
+        scores[m] = s
 
     query = """
     SELECT itunes_id, titles, descriptions, genre, subgenre, artwork_url
@@ -72,25 +64,4 @@ def get_recommendations(pod, cursor):
         r["similarity"] = scores[r["itunes_id"]]
         sc[i] = scores[r["itunes_id"]]
     idx = np.argsort(sc)[::-1]
-    temp = []
-    for i in idx:
-        temp.append(results[i])
-    results = temp
-
-    # title = []
-    # description = []
-    # genre = []
-    # subgenre = []
-    # artwork_url = []
-    # for m in matches:
-    #     title.append(m[0])
-    #     description.append(m[1])
-    #     genre.append(m[2])
-    #     subgenre.append(m[3])
-    #     artwork_url.append(m[4])
-    # results = pd.DataFrame({"itunes_id":match_ids,
-    #     "title":title, "description":description,
-    #     "genre":genre, "subgenre":subgenre,
-    #     "artwork_url":artwork_url,
-    #     "similarity":scores})
-    return results
+    return [results[i] for i in idx]
