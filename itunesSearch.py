@@ -3,27 +3,28 @@ import json
 import pandas as pd
 import numpy as np
 
-def search_pod(key_word, cursor):
-    itunesUrl = 'https://itunes.apple.com/search?'
-    parameters = {}
-    parameters['entity'] = 'podcast'
-    parameters['attribute'] = 'titleTerm'
+def search_pod(key_word, cursor, itunes_id = None):
+    if itunes_id == None:
+        itunesUrl = 'https://itunes.apple.com/search?'
+        parameters = {}
+        parameters['entity'] = 'podcast'
+        parameters['attribute'] = 'titleTerm'
 
-    requestString = ''
-    for param in parameters:
-        paramString = param + '=' + parameters[param]
-        if len(requestString) == 0:
-            requestString = paramString
-        else:
-            requestString = requestString + '&' + paramString
+        requestString = ''
+        for param in parameters:
+            paramString = param + '=' + parameters[param]
+            if len(requestString) == 0:
+                requestString = paramString
+            else:
+                requestString = requestString + '&' + paramString
 
-    itunesUrl = itunesUrl + requestString + '&term='
-    testUrl = itunesUrl + key_word
-    r = requests.get(testUrl)
-    res = json.loads(r.text)['results']
-    res = res[0]
+        itunesUrl = itunesUrl + requestString + '&term='
+        testUrl = itunesUrl + key_word
+        r = requests.get(testUrl)
+        res = json.loads(r.text)['results']
+        res = res[0]
+        itunes_id = res['collectionId']
 
-    itunes_id = res['collectionId']
     query = """
     SELECT titles, descriptions, genre, subgenre, artwork_url
     FROM all_pods
