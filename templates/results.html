@@ -11,6 +11,11 @@
     type="text/javascript"
     src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js"
   ></script>
+  <style>
+  tr.hide-table-padding td {
+  padding: 0;
+  }
+  </style>
   <title>Podcast Recommender</title>
   {{ resources|safe }}
 
@@ -40,10 +45,9 @@
         <div class="table-responsive">
           <table class="table table-hover">
             <tbody>
-              <h4>Similar Podcasts</hr>
+              <h4><b>Similar Podcasts</b></hr>
               <tr><th></th><th>Title</th><th>Genre</th><th>Subgenre</th></tr>
               {% for result in pod_recommendations %}
-              <!-- <tr onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';"> -->
                 <tr class="accordion-toggle collapsed"
                  id="accordion1_{{result['itunes_id']}}"
                  data-toggle="collapse"
@@ -52,14 +56,15 @@
                   <td class="vert-align">
                     <img src = "{{ result['artwork_url'] | safe }}" class="rounded" width="50px">
                   </td>
-                  <td class="vert-align">
+                  <td class="vert-align" data-toggle="tooltip"
+                  title="Click for more details">
                     {{ result['title'] }}
                   </td>
                   <td class="vert-align">{{ result['genre']}}</td>
                   <td class="vert-align">{{ result['subgenre']}}</td>
                 </tr>
                 <tr class="hide-table-padding" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">
-                  <td colspan="4">
+                  <td colspan="4" data-toggle="tooltip" title="Click to see results for this podcast">
                     <div class="collapse" id="collapseOne_{{result['itunes_id']}}">
                       {{ result['description']}}
                     </div>
