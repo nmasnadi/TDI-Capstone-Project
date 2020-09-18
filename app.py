@@ -4,10 +4,10 @@ from bokeh.resources import CDN
 from itunesSearch import search_pod, get_recommendations
 from psycopg2 import connect
 
-conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
-# import os
-# DATABASE_URL = os.environ['DATABASE_URL']
-# conn = connect(DATABASE_URL, sslmode='require')
+# conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
+import os
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = connect(DATABASE_URL, sslmode='require')
 
 cursor = conn.cursor()
 
