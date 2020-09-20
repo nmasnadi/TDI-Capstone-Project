@@ -1,8 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
 from bokeh.embed import components
 from bokeh.resources import CDN
-from itunesSearch import search_pod, get_recommendations
+from itunesSearch import search_pod, get_recommendations, get_plotting_data
 from psycopg2 import connect
+from makePlots import make_cluster_plot
 
 # conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
 import os
@@ -25,8 +26,9 @@ def index():
 def show_results(search_term):
     pod = search_pod(search_term, cursor)
     recs = get_recommendations(pod, cursor)
-    f = open("clusters.html", "r")
-    cluster_plot = f.read()
+    genre_show_list = [r['genre'] for r in recs[:10]]
+    plot_data = get_plotting_data(cursor)
+    cluster_plot = make_cluster_plot(plot_data, genre_show_list)
     return render_template("results.html", cluster_plot = cluster_plot, \
     pod = pod, \
     pod_recommendations = recs, \
@@ -38,8 +40,9 @@ def show_results_id(itunes_id, offset = 0):
     offset = int(offset)
     pod = search_pod(None, cursor, itunes_id)
     recs = get_recommendations(pod, cursor)
-    f = open("clusters.html", "r")
-    cluster_plot = f.read()
+    genre_show_list = [r['genre'] for r in recs[offset:offset+10]]
+    plot_data = get_plotting_data(cursor)
+    cluster_plot = make_cluster_plot(plot_data, genre_show_list)
     return render_template("results.html", cluster_plot = cluster_plot, \
     pod = pod, \
     pod_recommendations = recs, \

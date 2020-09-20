@@ -27,29 +27,20 @@
     <div class="container-fluid">
       <div class = "row justify-content-md-center">
 
-      <div class="col-md-6">
-        <div class = "row justify-content-md-center">
-          <div class="col-md-6">
-            <br>
-            <img class="img-fluid rounded" src = "{{ pod['artwork'] | safe }}" alt="{{ pod['title'] | safe }}", width="110px">
-            <br>
-            <h4><b>{{ pod['title'] }}</b></h4>
-            <h5 class="text-secondary">{{ pod['genre']}} | {{ pod['subgenre']}}</h5>
-            <p class="text-justify">{{ pod['description'] }}</p>
-          </div>
+      <div class="col-lg-5" >
+        <div class = "row justify-content-md-left">
+        <div class="col-md-4">
+          <br>
+          <img class="img-fluid rounded" src = "{{ pod['artwork'] | safe }}" alt="{{ pod['title'] | safe }}", width="150px">
+          <h4><b>{{ pod['title'] }}</b></h4>
+          <h5 class="text-secondary">{{ pod['genre']}} | {{ pod['subgenre']}}</h5>
         </div>
-        {{ cluster_plot|safe }}
-      </div>
-
-      <div class="col-md-6" >
-
-        <nav aria-label="Page navigation example">
-          <ul class="pagination float-right">
-            <li class="page-item"><a class="page-link" href="/itunes_id={{pod['id']}}&offset={{ [0,offset-10]|max }}">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="/itunes_id={{pod['id']}}&offset={{ [90,offset+10]|min }}">Next</a></li>
-          </ul>
-        </nav>
-
+        <div class="col-md-8">
+          <br>
+          <h5 class="text-justify">{{ pod['description'] }}</h5>
+        </div>
+        </div>
+        <br>
         <div class="table-responsive" id='main_table'>
           <table class="table table-hover">
             <tbody>
@@ -85,11 +76,27 @@
 
         <nav aria-label="Page navigation example">
           <ul class="pagination float-right">
-            <li class="page-item"><a class="page-link" href="/itunes_id={{pod['id']}}&offset={{ [0,offset-10]|max }}">Previous</a></li>
-            <li class="page-item"><a class="page-link" href="/itunes_id={{pod['id']}}&offset={{ [90,offset+10]|min }}">Next</a></li>
+            {% if offset > 9 %}
+            <li class="page-item">
+            {% else %}
+            <li class="page-item disabled">
+            {% endif %}
+              <a class="page-link" href="/itunes_id={{pod['id']}}&offset={{ offset-10 }}">Previous</a>
+            </li>
+            {% if offset < 90 %}
+            <li class="page-item">
+            {% else %}
+            <li class="page-item disabled">
+            {% endif %}
+              <a class="page-link" href="/itunes_id={{pod['id']}}&offset={{ offset+10 }}">Next</a>
+            </li>
           </ul>
         </nav>
 
+      </div>
+
+      <div class="col-lg-5">
+        {{ cluster_plot|safe }}
       </div>
 
       </div>

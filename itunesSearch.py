@@ -65,3 +65,18 @@ def get_recommendations(pod, cursor):
         sc[i] = scores[r["itunes_id"]]
     idx = np.argsort(sc)[::-1]
     return [results[i] for i in idx]
+
+def get_plotting_data(cursor):
+    query = "SELECT titles, genre, subgenre, x_tsne, y_tsne, color FROM all_pods;"
+    cursor.execute(query)
+    res = cursor.fetchall()
+    titles = [r[0] for r in res]
+    genre = [r[1] for r in res]
+    subgenre = [r[2] for r in res]
+    x_tsne = [r[3] for r in res]
+    y_tsne = [r[4] for r in res]
+    color = [r[5] for r in res]
+    plot_data = pd.DataFrame({"titles":titles, "genre":genre,\
+                 "subgenre":subgenre, "x":x_tsne, \
+                 "y":y_tsne, "color":color})
+    return plot_data
