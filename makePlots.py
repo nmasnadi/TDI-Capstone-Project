@@ -12,18 +12,18 @@ def make_cluster_plot(plot_data, genre_show_list = []):
 
     genre_list = list(plot_data.groupby(by="genre").groups.keys())
 
-    p = figure(title = "Podcast Clusters",\
+    p = figure(title = "Podcast Clusters (t-SNE)",\
        tools="wheel_zoom,pan,box_zoom,reset",\
        plot_width=700, plot_height=500,\
        toolbar_location="left")
     # title properties
     p.title.align = "center"
-    p.title.text_font_size = "25px"
+    p.title.text_font_size = "20px"
 
     group = dict()
     items1 = []
     items2 = []
-
+    rends = []
     for i, g in enumerate(genre_list):
         genre_idx = plot_data[plot_data["genre"] == g].index.to_list()
         source = ColumnDataSource(\
@@ -43,9 +43,11 @@ def make_cluster_plot(plot_data, genre_show_list = []):
             items2.append((g,[group[g]]))
         else:
             items1.append((g,[group[g]]))
+            rends.append(group[g])
 
     # create the hover tool - modified to show only one result
-    custom_hover = HoverTool(mode="mouse", point_policy="follow_mouse")
+    custom_hover = HoverTool(mode="mouse", point_policy="follow_mouse",\
+        renderers = rends)
     custom_hover.tooltips = """
         <style>
             .bk-tooltip>div:not(:first-child) {display:none;}
@@ -56,9 +58,9 @@ def make_cluster_plot(plot_data, genre_show_list = []):
     """
     p.add_tools(custom_hover)
 
-    p.axis.visible = False
+    # p.axis.visible = False
     p.outline_line_width = 7
-    p.outline_line_alpha = 0.3
+    p.outline_line_alpha = 0.2
     p.outline_line_color = "navy"
     p.toolbar.autohide = True
     p.grid.visible = False

@@ -32,11 +32,6 @@ def get_recommendations(pod, cursor):
     """SELECT match_id, score
     FROM all_matches_meanvec
     WHERE itunes_id = %s;"""
-    # query = \
-    # """SELECT match_id, score
-    # FROM all_matches_meanvec
-    # WHERE itunes_id = %s
-    # ORDER BY score DESC;"""
     cursor.execute(query, (str(itunes_id), ))
     res = cursor.fetchone()
     match_ids = res[0].split(',')
