@@ -75,3 +75,8 @@ def get_plotting_data(cursor):
                  "subgenre":subgenre, "x":x_tsne, \
                  "y":y_tsne, "color":color})
     return plot_data
+
+def random_pod(cursor):
+    query = "SELECT titles FROM all_pods ORDER BY RANDOM() LIMIT 1"
+    cursor.execute(query)
+    return cursor.fetchone()[0]
