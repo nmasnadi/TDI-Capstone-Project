@@ -66,11 +66,13 @@ def make_cluster_plot(plot_data, genre_show_list = []):
     p.grid.visible = False
 
     legends = []
-    legends.append(Legend(items=items1))
-    # for i in range(0, len(items2), 6):
-    #     legends.append(Legend(items=items2[i:i+6]))
+    # legends.append(Legend(items=items1))
+    for i in range(0, len(items1), 4):
+        legends.append(Legend(items=items1[i:i+4]))
     for legend in legends:
         p.add_layout(legend,'below')
+
+    p.plot_height = 500 + ((len(items1)-1)//4)*47
 
     p.legend.click_policy="mute"
     p.legend.location = "bottom_center"
