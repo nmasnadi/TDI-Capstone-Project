@@ -4,7 +4,7 @@ from bokeh.resources import CDN
 from itunesSearch import search_pod, get_recommendations, get_plotting_data
 from psycopg2 import connect
 from makePlots import make_cluster_plot
-from random import randrange
+# from random import randrange
 
 # conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
 import os
@@ -29,7 +29,7 @@ def index():
         cursor.execute(query)
         pod_placeholder = cursor.fetchone()[0]
         print(pod_placeholder)
-        idx = randrange(len(pod_placeholders))
+        # idx = randrange(len(pod_placeholders))
         return render_template("index.html", pod_placeholder = pod_placeholder)
 
 @app.route('/term=<search_term>', methods=['GET', 'POST'])
