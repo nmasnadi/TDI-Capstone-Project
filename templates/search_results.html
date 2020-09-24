@@ -14,16 +14,10 @@
       src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js">
     </script>
     <!-- Bokeh CDN -->
-    <!-- <script src="https://cdn.bokeh.org/bokeh/release/bokeh-1.4.0.min.js"></script> -->
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.1.min.js"></script>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-widgets-2.2.1.min.js"></script>
-    <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.1.min.js"></script>
-    <!-- Bokeh plot script -->
-    {{ plot_script|safe }}
     <!-- fixes the expand toggle padding -->
     <style>
       tr.hide-table-padding td {padding: 0;}
-      tr.hide-table-padding {cursor: pointer;}
+      tr.clickable {cursor: pointer;}
     </style>
 
     <title>Podcast Recommender</title>
@@ -60,31 +54,15 @@
       <div class = "row justify-content-md-center">
 
       <div class="col-lg-5" >
-        <div class = "row justify-content-md-left">
-        <div class="col-md-4">
-          <br>
-          <img class="img-fluid rounded" src = "{{ pod['artwork_url'] | safe }}" alt="{{ pod['title'] | safe }}", width="150px">
-          <h4><b>{{ pod['title'] }}</b></h4>
-          <h5 class="text-secondary">{{ pod['genre']}} | {{ pod['subgenre']}}</h5>
-        </div>
-        <div class="col-md-8">
-          <br>
-          <h5 class="text-justify lead"><strong>{{ pod['description'] }}</strong></h5>
-        </div>
-        </div>
         <br>
         <div class="table-responsive" id='main_table'>
           <table class="table table-hover">
             <tbody>
-              <h4><b>Similar Podcasts</b></hr>
+              <h4><b>Search Results</b></hr>
               <tr><th></th><th>Title</th><th>Genre</th><th>Subgenre</th></tr>
-              {% for result in pod_recommendations[offset:offset+10] %}
+              {% for result in pod_recommendations[offset:offset+5] %}
 
-                <tr class="accordion-toggle collapsed"
-                 id="accordion1_{{result['itunes_id']}}"
-                 data-toggle="collapse"
-                 data-parent="#accordion1_{{result['itunes_id']}}"
-                 href="#collapseOne_{{result['itunes_id']}}">
+                <tr class="clickable" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">
                   <td class="vert-align">
                     <img src = "{{ result['artwork_url'] | safe }}" class="rounded" width="50px">
                   </td>
@@ -93,9 +71,9 @@
                   <td class="vert-align">{{ result['subgenre'] }}</td>
                 </tr>
 
-                <tr class="hide-table-padding" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">
+                <tr>
                   <td colspan="4">
-                    <div class="collapse" id="collapseOne_{{result['itunes_id']}}">
+                    <div>
                       <p class="text-justify">{{ result['description']}}</p>
                     </div>
                   </td>
@@ -108,28 +86,23 @@
 
         <nav aria-label="Page navigation example">
           <ul class="pagination float-right">
-            {% if offset > 9 %}
+            {% if offset > 4 %}
             <li class="page-item">
             {% else %}
             <li class="page-item disabled">
             {% endif %}
-              <a class="page-link" href="/itunes_id={{pod['itunes_id']}}&offset={{ offset-10 }}">Previous</a>
+              <a class="page-link" href="/term={{ search_term }}&offset={{ offset-5 }}">Previous</a>
             </li>
-            {% if offset < pod_recommendations|length-10 %}
+            {% if offset < pod_recommendations|length-5 %}
             <li class="page-item">
             {% else %}
             <li class="page-item disabled">
             {% endif %}
-              <a class="page-link" href="/itunes_id={{pod['itunes_id']}}&offset={{ offset+10 }}">Next</a>
+              <a class="page-link" href="/term={{ search_term }}&offset={{ offset+5 }}">Next</a>
             </li>
           </ul>
         </nav>
 
-      </div>
-
-      <!-- Bokeh plot -->
-      <div class="col-lg-5">
-        {{ plot_div|safe }}
       </div>
 
       </div>

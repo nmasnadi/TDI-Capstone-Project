@@ -4,9 +4,9 @@ import numpy as np
 from bokeh.plotting import figure #, show, output_file, save
 from bokeh.palettes import Category20
 from bokeh.layouts import column
-from bokeh.models import Legend, ColumnDataSource, HoverTool, Range1d
+from bokeh.models import Legend, ColumnDataSource, HoverTool, Range1d, CustomJSHover
 from bokeh.resources import CDN
-from bokeh.embed import file_html
+from bokeh.embed import components
 
 def make_cluster_plot(plot_data, genre_show_list = []):
 
@@ -23,7 +23,6 @@ def make_cluster_plot(plot_data, genre_show_list = []):
     group = dict()
     items1 = []
     items2 = []
-    rends = []
     for i, g in enumerate(genre_list):
         genre_idx = plot_data[plot_data["genre"] == g].index.to_list()
         source = ColumnDataSource(\
@@ -31,7 +30,8 @@ def make_cluster_plot(plot_data, genre_show_list = []):
                y=plot_data.loc[genre_idx,'y'],\
                title = plot_data.loc[genre_idx, "titles"],\
                genre = plot_data.loc[genre_idx, "genre"],\
-               subgenre = plot_data.loc[genre_idx, "subgenre"]))
+               subgenre = plot_data.loc[genre_idx, "subgenre"], \
+               artwork_url = plot_data.loc[genre_idx, "artwork_url"]))
         group[g] = p.circle(x='x', y='y', size = 10,\
                  color = Category20[19][-(i+1)],\
                  fill_alpha=0.5,\
@@ -43,19 +43,35 @@ def make_cluster_plot(plot_data, genre_show_list = []):
             items2.append((g,[group[g]]))
         else:
             items1.append((g,[group[g]]))
-            rends.append(group[g])
 
     # create the hover tool - modified to show only one result
-    custom_hover = HoverTool(mode="mouse", point_policy="follow_mouse",\
-        renderers = rends)
-    custom_hover.tooltips = """
-        <style>
-            .bk-tooltip>div:not(:first-child) {display:none;}
-        </style>
+    custom_hover = HoverTool(mode="mouse", point_policy="follow_mouse", \
+        muted_policy = "ignore")
 
-        <b>Title: </b> @title <br>
-        <b>Genre: </b> @genre | @subgenre
+    custom_formatter = CustomJSHover(code="""
+        special_vars.indices = special_vars.indices.slice(0,3)
+        if (special_vars.indices.indexOf(special_vars.index) >= 0)
+        {
+            return " "
+        }
+        else
+        {
+            return " hidden "
+        }""")
+    custom_hover.tooltips = """
+    <div @title{custom|safe}>
+        <div>
+        <img
+            src="@artwork_url" alt="@artwork_url" width="42"
+            style="margin: 5px 5px 5px 5px;"
+            border="2"
+        ></img>
+        <span style="font-size: 17px; font-weight: bold;">@title</span>
+        </div>
+    </div>
     """
+    custom_hover.formatters = {'@title':custom_formatter}
+
     p.add_tools(custom_hover)
 
     # p.axis.visible = False
@@ -79,4 +95,4 @@ def make_cluster_plot(plot_data, genre_show_list = []):
     p.legend.orientation = "horizontal"
 
     clusters = column([p], sizing_mode = "scale_width")
-    return file_html(clusters, CDN, "my plot")
+    return components(clusters)

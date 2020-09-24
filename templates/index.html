@@ -127,8 +127,9 @@
 
     <main role="main" class="inner cover">
       <h1 class="cover-heading">Podcasts similar to ...</h1>
-      <form method = "POST">
+      <form method = "POST" autocomplete="off" action="/">
         <input name = "pod_name" class="form-control form-control-lg" type="text" placeholder="e.g., {{ pod_placeholder }}" autofocus>
+        <button class="btn btn-lg btn-secondary" type="submit">Search</button>
       </form>
     </main>
 
