@@ -28,7 +28,7 @@ def search_pod_by_keyword(key_word, cursor):
 
     if not res:
         return []
-        
+
     itunes_ids = [str(r['collectionId']) for r in res]
 
     query = """
@@ -76,13 +76,21 @@ def get_recommendations(pod, cursor):
     cursor.execute(query, (tuple(match_ids),))
     matches = cursor.fetchall()
 
+    print(matches)
+
     results = [{"itunes_id": str(m[0]),
                 "title": m[1],
                 "description": m[2],
                 "genre": m[3],
-                "subgenre": m[4],
-                "artwork_url": m[5].replace("600x600","100x100")}
-                for i, m in enumerate(matches)]
+                "subgenre": m[4]}
+                for m in matches]
+
+    for i, m in enumerate(matches):
+        try:
+            results[i]["artwork_url"] = m[5].replace("600x600","100x100")
+        except:
+            results[i]["artwork_url"] = None
+
     sc = np.zeros(len(scores))
     for i, r in enumerate(results):
         r["similarity"] = scores[r["itunes_id"]]
