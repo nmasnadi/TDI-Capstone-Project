@@ -8,12 +8,7 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <!-- MDB -->
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js">
-    </script>
-    <!-- Bokeh CDN -->
+
     <!-- fixes the expand toggle padding -->
     <style>
       tr.hide-table-padding td {padding: 0;}
@@ -88,18 +83,15 @@
           <ul class="pagination float-right">
             {% if offset > 4 %}
             <li class="page-item">
-            {% else %}
-            <li class="page-item disabled">
-            {% endif %}
               <a class="page-link" href="/term={{ search_term }}&offset={{ offset-5 }}">Previous</a>
             </li>
+            {% endif %}
+
             {% if offset < pod_recommendations|length-5 %}
             <li class="page-item">
-            {% else %}
-            <li class="page-item disabled">
-            {% endif %}
               <a class="page-link" href="/term={{ search_term }}&offset={{ offset+5 }}">Next</a>
             </li>
+            {% endif %}
           </ul>
         </nav>
 

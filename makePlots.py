@@ -66,7 +66,7 @@ def make_cluster_plot(plot_data, genre_show_list = []):
             style="margin: 5px 5px 5px 5px;"
             border="2"
         ></img>
-        <span style="font-size: 17px; font-weight: bold;">@title</span>
+        <span style="font-size: 15px; font-weight: bold;">@title</span>
         </div>
     </div>
     """
