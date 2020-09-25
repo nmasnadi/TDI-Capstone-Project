@@ -2,6 +2,7 @@ from flask import Flask, render_template, request, redirect, url_for
 from itunesSearch import *
 from psycopg2 import connect
 from makePlots import make_cluster_plot
+import random
 
 # conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
 import os
@@ -20,22 +21,30 @@ app = Flask(__name__)
 def index():
     if request.method == 'POST':
         key_word = request.form['pod_name']
+        if not key_word:
+            key_word = "show me a random podcast"
         return redirect(url_for('show_search_results', \
             search_term = key_word, offset = 0))
     else:
-        r = request.args.get('input')
-        print(r)
-        return render_template("index.html", pod_placeholder = random_pod(cursor))
+        return render_template("index.html", \
+            pod_placeholder = random.choice(pod_placeholders))
 
 @app.route('/term=<search_term>&offset=<offset>', methods=['GET', 'POST'])
 def show_search_results(search_term, offset = 0):
     offset = int(offset)
-    recs = search_pod_by_keyword(search_term, cursor)
+    if search_term == "show me a random podcast":
+        search_term = random_pod(cursor)
+        table_title = "Random Suggestion"
+        recs = search_pod_by_keyword(search_term, cursor)[:1]
+    else:
+        table_title = "Search Results for '"+ search_term + "'"
+        recs = search_pod_by_keyword(search_term, cursor)
     return render_template("search_results.html", \
     pod_recommendations = recs, \
     offset = offset, \
     search_term = search_term, \
-    pod_placeholder = random_pod(cursor))
+    table_title = table_title, \
+    pod_placeholder = random.choice(pod_placeholders))
 
 @app.route('/itunes_id=<itunes_id>&offset=<offset>', methods=['GET', 'POST'])
 def show_results_id(itunes_id, offset = 0):
@@ -50,7 +59,7 @@ def show_results_id(itunes_id, offset = 0):
     pod = pod, \
     pod_recommendations = recs, \
     offset = offset, \
-    pod_placeholder = random_pod(cursor))
+    pod_placeholder = random.choice(pod_placeholders))
 
 if __name__ == '__main__':
     app.run(port=33507)

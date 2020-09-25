@@ -43,7 +43,7 @@
               <a class="nav-link" href="#">About</a>
             </li>
           </ul>
-          <form class="form-inline my-2 my-lg-0" method="POST" action="/">
+          <form class="form-inline my-2 my-lg-0" method="POST" action="/" autocomplete="off">
             <input class="form-control mr-sm-2" type="search" placeholder="e.g., {{ pod_placeholder }}" name="pod_name">
             <button class="btn btn-outline-primary my-2 my-sm-0" type="submit">Search</button>
           </form>
@@ -58,7 +58,7 @@
         <div class="table-responsive" id='main_table'>
           <table class="table table-hover">
             <tbody>
-              <h4><b>Search Results</b></hr>
+              <h4><b>{{table_title}}</b></hr>
               <tr><th></th><th>Title</th><th>Genre</th><th>Subgenre</th></tr>
               {% for result in pod_recommendations[offset:offset+5] %}
 
@@ -71,7 +71,7 @@
                   <td class="vert-align">{{ result['subgenre'] }}</td>
                 </tr>
 
-                <tr>
+                <tr class="clickable" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">
                   <td colspan="4">
                     <div>
                       <p class="text-justify">{{ result['description']}}</p>

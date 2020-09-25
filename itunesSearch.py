@@ -25,6 +25,10 @@ def search_pod_by_keyword(key_word, cursor):
     testUrl = itunesUrl + key_word
     r = requests.get(testUrl)
     res = json.loads(r.text)['results']
+
+    if not res:
+        return []
+        
     itunes_ids = [str(r['collectionId']) for r in res]
 
     query = """
