@@ -8,11 +8,13 @@
 
     <!-- Bootstrap -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" integrity="sha384-JcKb8q3iqJ61gNV9KGb8thSsNjpSL0n8PARn9HuZOnIxN0hoP+VmmDGMN5t9UJ0Z" crossorigin="anonymous">
-    <!-- MDB -->
-    <script
-      type="text/javascript"
-      src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/1.0.0/mdb.min.js">
-    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+    <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script> -->
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
+
+    <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+
     <!-- Bokeh CDN -->
     <!-- <script src="https://cdn.bokeh.org/bokeh/release/bokeh-1.4.0.min.js"></script> -->
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-2.2.1.min.js"></script>
@@ -20,10 +22,20 @@
     <script src="https://cdn.bokeh.org/bokeh/release/bokeh-tables-2.2.1.min.js"></script>
     <!-- Bokeh plot script -->
     {{ plot_script|safe }}
-    <!-- fixes the expand toggle padding -->
     <style>
+      /* fixes the expand toggle padding     */
       tr.hide-table-padding td {padding: 0;}
       tr.hide-table-padding {cursor: pointer;}
+
+      .accordion-toggle:after {
+      		font-family: 'FontAwesome';
+          	content: "\f106";
+      		font-size: 150%;
+          float: right;
+      	}
+      	.accordion-toggle.collapsed:after {
+      		content: "\f107";
+      	}
     </style>
 
     <title>Podcast Recommender</title>
@@ -86,11 +98,11 @@
                  data-parent="#accordion1_{{result['itunes_id']}}"
                  href="#collapseOne_{{result['itunes_id']}}">
                   <td class="vert-align">
-                    <img src = "{{ result['artwork_url'] | safe }}" class="rounded" width="50px">
+                    <img src = "{{ result['artwork_url'] | safe }}" class="rounded" width="70px">
                   </td>
                   <td class="vert-align">{{ result['title'] }}</td>
                   <td class="vert-align">{{ result['genre'] }}</td>
-                  <td class="vert-align">{{ result['subgenre'] }}</td>
+                  <td class="vert-align expand-button">{{ result['subgenre'] }}</td>
                 </tr>
 
                 <tr class="hide-table-padding" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">
