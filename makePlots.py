@@ -15,7 +15,7 @@ def make_cluster_plot(plot_data, genre_show_list = []):
     p = figure(title = "Podcast Clusters (t-SNE)",\
        tools="wheel_zoom,pan,box_zoom,reset",\
        plot_width=700, plot_height=500,\
-       toolbar_location="left")
+       toolbar_location="right")
     # title properties
     p.title.align = "center"
     p.title.text_font_size = "20px"
