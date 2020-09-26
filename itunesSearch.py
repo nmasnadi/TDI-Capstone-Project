@@ -76,8 +76,6 @@ def get_recommendations(pod, cursor):
     cursor.execute(query, (tuple(match_ids),))
     matches = cursor.fetchall()
 
-    print(matches)
-
     results = [{"itunes_id": str(m[0]),
                 "title": m[1],
                 "description": m[2],
@@ -99,7 +97,7 @@ def get_recommendations(pod, cursor):
     return [results[i] for i in idx]
 
 def get_plotting_data(cursor):
-    query = "SELECT titles, genre, subgenre, x_tsne, y_tsne, color, artwork_url FROM all_pods;"
+    query = "SELECT titles, genre, subgenre, x_tsne, y_tsne, color, artwork_url, itunes_id FROM all_pods;"
     cursor.execute(query)
     res = cursor.fetchall()
     titles = [r[0] for r in res]
@@ -109,12 +107,18 @@ def get_plotting_data(cursor):
     y_tsne = [r[4] for r in res]
     color = [r[5] for r in res]
     artwork_url = [r[6] for r in res]
+    itunes_id = [r[7] for r in res]
     plot_data = pd.DataFrame({"titles":titles, "genre":genre,\
                  "subgenre":subgenre, "x":x_tsne, \
                  "y":y_tsne, "color":color, \
-                 "artwork_url":artwork_url})
-    plot_data = plot_data.dropna(subset=["artwork_url"])
-    plot_data["artwork_url"] = plot_data["artwork_url"].apply(lambda x:x.replace("600x600","100x100"))
+                 "artwork_url":artwork_url, \
+                 "itunes_id":itunes_id})
+    def smaller(x):
+        if x:
+            return x.replace("600x600","100x100")
+        else:
+            return None
+    plot_data["artwork_url"] = plot_data["artwork_url"].apply(smaller)
     return plot_data
 
 def random_pod(cursor):
