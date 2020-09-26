@@ -4,10 +4,10 @@ from psycopg2 import connect
 from makePlots import make_cluster_plot
 import random
 
-conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
-# import os
-# DATABASE_URL = os.environ['DATABASE_URL']
-# conn = connect(DATABASE_URL, sslmode='require')
+# conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
+import os
+DATABASE_URL = os.environ['DATABASE_URL']
+conn = connect(DATABASE_URL, sslmode='require')
 
 cursor = conn.cursor()
 pod_placeholders = ["Serial", "This American Life", \
