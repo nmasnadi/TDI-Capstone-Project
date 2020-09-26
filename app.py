@@ -39,6 +39,9 @@ def show_search_results(search_term, offset = 0):
     else:
         table_title = 'Search Results for "'+ search_term + '"'
         recs = search_pod_by_keyword(search_term, cursor)
+        if len(recs) == 1:
+            return redirect(url_for('show_results_id', \
+                itunes_id = recs[0]['itunes_id'], offset = 0))
     return render_template("search_results.html", \
         pod_recommendations = recs, \
         offset = offset, \
