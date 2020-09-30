@@ -100,5 +100,5 @@ def make_cluster_plot(plot_data, pod, recs):
     p.legend.location = "bottom_center"
     p.legend.orientation = "horizontal"
 
-    clusters = column([p], sizing_mode = "scale_width")
+    clusters = column([p], sizing_mode = "stretch_width")
     return components(clusters)
