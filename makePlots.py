@@ -9,8 +9,8 @@ from bokeh.embed import components
 
 def make_cluster_plot(plot_data, pod, recs):
 
-    main_pod = plot_data[plot_data['itunes_id'] == pod['itunes_id']]
-    recs = pd.DataFrame(recs).merge(plot_data, on=["itunes_id", "genre", "subgenre", "artwork_url"]).drop(columns=["titles"])
+    main_pod = plot_data[plot_data['itunes_id'] == pod['itunes_id'][0]]
+    recs = recs.merge(plot_data, on=["title", "itunes_id", "genre", "subgenre"])
     genre_list = list(plot_data.groupby(by="genre").groups.keys())
     show_list = recs["genre"].unique()
 
@@ -28,10 +28,9 @@ def make_cluster_plot(plot_data, pod, recs):
         genre_idx = plot_data[plot_data["genre"] == g].index.to_list()
         source = ColumnDataSource(dict(x=plot_data.loc[genre_idx,'x'],\
             y=plot_data.loc[genre_idx,'y'],\
-            title = plot_data.loc[genre_idx, "titles"],\
+            title = plot_data.loc[genre_idx, "title"],\
             genre = plot_data.loc[genre_idx, "genre"],\
-            subgenre = plot_data.loc[genre_idx, "subgenre"], \
-            artwork_url = plot_data.loc[genre_idx, "artwork_url"]))
+            subgenre = plot_data.loc[genre_idx, "subgenre"]))
         group[g] = p.circle(x='x', y='y', size = 10,\
             color = Category20[19][-(i+1)],\
             fill_alpha=0.5,\

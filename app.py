@@ -1,15 +1,9 @@
 from flask import Flask, render_template, request, redirect, url_for
-from itunesSearch import *
-from psycopg2 import connect
+from searchDatabase import *
 from makePlots import make_cluster_plot
 import random
 
-# conn = connect(dbname="podcasts", user="naeem", password="mypass", host="localhost", port="5432")
-import os
-DATABASE_URL = os.environ['DATABASE_URL']
-conn = connect(DATABASE_URL, sslmode='require')
-
-cursor = conn.cursor()
+db = SqlTable(local = False)
 pod_placeholders = ["Serial", "This American Life", \
     "Dr. Death", "Radiolab", "The Daily", \
     "Stuff You Should Know", "Planet Money from NPR", \
@@ -33,15 +27,12 @@ def index():
 def show_search_results(search_term, offset = 0):
     offset = int(offset)
     if search_term == "random_podcast":
-        search_term = random_pod(cursor)
+        recs = db.random_pod()
+        search_term = recs["title"]
         table_title = "Random Suggestion"
-        recs = search_pod_by_keyword(search_term, cursor)[:1]
     else:
         table_title = 'Search Results for "'+ search_term + '"'
-        recs = search_pod_by_keyword(search_term, cursor)
-        if len(recs) == 1:
-            return redirect(url_for('show_results_id', \
-                itunes_id = recs[0]['itunes_id'], offset = 0))
+        recs = db.search_pod_by_keyword(search_term)
     return render_template("search_results.html", \
         pod_recommendations = recs, \
         offset = offset, \
@@ -52,10 +43,10 @@ def show_search_results(search_term, offset = 0):
 @app.route('/itunes_id=<itunes_id>&offset=<offset>', methods=['GET', 'POST'])
 def show_results_id(itunes_id, offset = 0):
     offset = int(offset)
-    pod = search_pod_by_id(itunes_id, cursor)
-    recs = get_recommendations(pod, cursor)
-    genre_show_list = [r['genre'] for r in recs[offset:offset+10]]
-    plot_data = get_plotting_data(cursor)
+    pod = db.pod_lookup([itunes_id])
+    recs = db.get_recommendations(itunes_id)
+    # genre_show_list = recs.loc[offset:offset+10, 'genre'].to_list()
+    plot_data = db.get_plotting_data()
     plot_script, plot_div = make_cluster_plot(plot_data, pod, recs[offset:offset+10])
 
     return render_template("results.html", \
