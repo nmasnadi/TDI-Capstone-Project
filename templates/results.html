@@ -81,7 +81,7 @@
         </div>
         <div class="col-md-8">
           <br>
-          <h5 class="text-justify lead"><strong>{{ pod['description'].item() }}</strong></h5>
+          <h5 class="text-justify">{{ pod['description'].item() }}</h5>
         </div>
         </div>
         <br>
@@ -148,17 +148,18 @@
             <div class="collapse" id="collapseExample">
               <b>What is this plot?</b>
               <p class="text-justify">
-                Each podcast in our database is represented by a 300-dimensional vector of
-                real numbers. In order to visualize the data,
-                these vectors were mapped to a two-dimensional space using a
+                Each podcast in our database is represented by a 300-dimensional
+                vector of real numbers. In order to visualize the data, these
+                vectors were mapped to a two-dimensional space using a
                 <a href="https://lvdmaaten.github.io/tsne/">t-SNE</a>
                 transformation. Each circle on this plot represents one podcast.
-                One interesting observation
-                is that podcasts which belong to the same genre according to iTunes, ended
-                up close to each other on this map (the genres where not used in the training
-                of the model). You can click on a genre in the legend to turn it on/off. You can
-                also hover the mouse over the hexagonal markers to see where the recommendations
-                on this page are located on the map.
+                One interesting observation is that podcasts which belong to the
+                same genre according to iTunes, ended up close to each other on
+                this map (the genres where not used in the training of the
+                model). You can click on a genre in the legend below the map to
+                turn it on/off. You can also hover the mouse over the hexagonal
+                markers to see where the recommendations on this page are
+                located on the map.
               </p>
             </div>
           </div>
