@@ -14,8 +14,8 @@ def make_cluster_plot(plot_data, pod, recs):
     genre_list = list(plot_data.groupby(by="genre").groups.keys())
     show_list = recs["genre"].unique()
 
-    p = figure(title = "Podcast Clusters (t-SNE)",\
-       tools="wheel_zoom,pan,box_zoom,reset",\
+    # p = figure(title = "Podcast Clusters (t-SNE)",\
+    p = figure(tools="wheel_zoom,pan,box_zoom,reset",\
        plot_width=700, plot_height=500,\
        toolbar_location="right")
     p.title.align = "center"

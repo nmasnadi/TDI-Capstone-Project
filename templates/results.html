@@ -139,6 +139,30 @@
 
       <!-- Bokeh plot -->
       <div class="col-lg-5">
+        <br>
+        <h3 class = "text-center bg-light accordion-toggle collapsed" data-toggle="collapse" href="#collapseExample">
+            <b>Podcast Clusters</b>
+        </h3>
+        <div class="row justify-content-md-center">
+          <div class="col-lg-10">
+            <div class="collapse" id="collapseExample">
+              <h4>What is this plot?</h4>
+              <h5 class="text-justify lead">
+                Each podcast in our database is represented by a 300-dimensional vector of
+                real numbers. In order to visualize the data,
+                these vectors were mapped to a two-dimensional space using a
+                <a href="https://lvdmaaten.github.io/tsne/">t-SNE</a>
+                transformation. Each circle on this plot represents one podcast.
+                One interesting observation
+                is that podcasts which belong to the same genre according to iTunes, ended
+                up close to each other on this map (the genres where not used in the training
+                of the model). You can click on a genre in the legend to turn it on/off. You can
+                also hover the mouse over the hexagonal markers to see where the recommendations
+                on this page are located on the map.
+              </h5>
+            </div>
+          </div>
+        </div>
         {{ plot_div|safe }}
       </div>
 
