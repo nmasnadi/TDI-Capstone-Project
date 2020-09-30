@@ -16,8 +16,9 @@ def make_cluster_plot(plot_data, pod, recs):
 
     # p = figure(title = "Podcast Clusters (t-SNE)",\
     p = figure(tools="wheel_zoom,pan,box_zoom,reset",\
-       plot_width=700, plot_height=500,\
-       toolbar_location="right")
+        plot_width=700, plot_height=500,\
+        toolbar_location="right")
+    p.toolbar.active_drag = None
     p.title.align = "center"
     p.title.text_font_size = "20px"
 
