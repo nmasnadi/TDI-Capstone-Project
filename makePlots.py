@@ -9,45 +9,36 @@ from bokeh.embed import components
 
 def make_cluster_plot(plot_data, pod, recs):
 
+    # get x, y coordinates for pod and recs
     main_pod = plot_data[plot_data['itunes_id'] == pod['itunes_id'][0]]
     recs = recs.merge(plot_data, on=["title", "itunes_id", "genre", "subgenre"])
+
     genre_list = list(plot_data.groupby(by="genre").groups.keys())
     show_list = recs["genre"].unique()
 
-    # p = figure(title = "Podcast Clusters (t-SNE)",\
     p = figure(tools="wheel_zoom,pan,box_zoom,reset",\
         plot_width=700, plot_height=500,\
         toolbar_location="right")
-    p.toolbar.active_drag = None
-    p.title.align = "center"
-    p.title.text_font_size = "20px"
+    p.toolbar.active_drag = None # disabling pan helps with scrolling on smartphones
 
-    # plot all data points
+    # plot all data points and group them by genres for the legends
     group = dict()
-    items1 = []
+    legend_items = []
     for i, g in enumerate(genre_list):
-        genre_idx = plot_data[plot_data["genre"] == g].index.to_list()
-        source = ColumnDataSource(dict(x=plot_data.loc[genre_idx,'x'],\
-            y=plot_data.loc[genre_idx,'y'],\
-            title = plot_data.loc[genre_idx, "title"],\
-            genre = plot_data.loc[genre_idx, "genre"],\
-            subgenre = plot_data.loc[genre_idx, "subgenre"]))
+        source = ColumnDataSource(plot_data.loc[plot_data["genre"] == g])
         group[g] = p.circle(x='x', y='y', size = 10,\
             color = Category20[19][-(i+1)],\
             fill_alpha=0.5,\
             line_alpha=0, muted_color="lightgray",\
             source = source, muted_alpha = 0.05)
-        items1.append((g,[group[g]]))
-        if g not in show_list:
+        legend_items.append((g,[group[g]]))
+        if g not in show_list: # only show genres that are in the recommendations
             group[g].muted = True
 
     # plot the recommendations on the current page
-    source = ColumnDataSource(dict(x=recs['x'], y=recs['y'], \
-        title = recs['title'], artwork_url = recs["artwork_url"],\
-        rank = recs.index))
     rend_main = p.hex('x', 'y', fill_color = 'ivory', line_color = "royalblue", \
         line_width = 3, size = 15, \
-        fill_alpha = 1, source = source)
+        fill_alpha = 1, source = ColumnDataSource(recs))
     # plot the main podcast
     p.circle(main_pod['x'], main_pod['y'], color = "red", size = 5)
     p.circle(main_pod['x'], main_pod['y'], fill_color = "red", \
@@ -57,8 +48,9 @@ def make_cluster_plot(plot_data, pod, recs):
     custom_hover = HoverTool(mode="mouse", point_policy="snap_to_data", \
         muted_policy = "ignore", renderers = [rend_main])
 
+    # limit the hover list to 5 items in case of overlapping glyphs
     custom_formatter = CustomJSHover(code="""
-        special_vars.indices = special_vars.indices.slice(0,3)
+        special_vars.indices = special_vars.indices.slice(0,5)
         if (special_vars.indices.indexOf(special_vars.index) >= 0)
         {
             return " "
@@ -90,12 +82,12 @@ def make_cluster_plot(plot_data, pod, recs):
     p.grid.visible = False
 
     legends = []
-    for i in range(0, len(items1), 4):
-        legends.append(Legend(items=items1[i:i+4], margin=2))
+    for i in range(0, len(legend_items), 4):
+        legends.append(Legend(items=legend_items[i:i+4], margin=2))
     for legend in legends:
         p.add_layout(legend,'below')
 
-    p.plot_height = (600 + ((len(items1)-1)//4)*40)
+    p.plot_height = (600 + ((len(legend_items)-1)//4)*40)
 
     p.legend.click_policy="mute"
     p.legend.location = "bottom_center"
