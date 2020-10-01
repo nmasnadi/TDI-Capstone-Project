@@ -91,11 +91,11 @@ def make_cluster_plot(plot_data, pod, recs):
 
     legends = []
     for i in range(0, len(items1), 4):
-        legends.append(Legend(items=items1[i:i+4]))
+        legends.append(Legend(items=items1[i:i+4], margin=2))
     for legend in legends:
         p.add_layout(legend,'below')
 
-    p.plot_height = (600 + ((len(items1)-1)//4)*47)
+    p.plot_height = (600 + ((len(items1)-1)//4)*40)
 
     p.legend.click_policy="mute"
     p.legend.location = "bottom_center"
