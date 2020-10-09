@@ -49,6 +49,11 @@ class SqlTable:
             idx.append(itunes_ids.index(_id))
         idx = np.argsort(np.array(idx))
         df = df.loc[idx].reset_index(drop=True)
+
+        # exact_match = df[df["title"].apply(lambda x:x.lower()) == key_word.lower()]
+        # if not exact_match.empty:
+        #     return exact_match
+        
         return df
 
     def get_recommendations(self, itunes_id):

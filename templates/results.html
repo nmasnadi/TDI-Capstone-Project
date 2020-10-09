@@ -100,7 +100,7 @@
           <table class="table table-hover">
             <tbody>
               <h4><b>Similar Podcasts</b></hr>
-              <tr><th></th><th>Title</th><th>Genre</th><th>Subgenre</th></tr>
+              <tr><th></th><th>Title</th><th>Genre</th></tr>
               {% for index, result in pod_recommendations[offset:offset+10].iterrows() %}
 
                 <tr>
@@ -108,18 +108,18 @@
                     <img src = "{{ result['artwork_url'] | safe }}" class="rounded" width="70px">
                   </td>
                   <td class="vert-align" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">{{ result['title'] }}</td>
-                  <td class="vert-align" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">{{ result['genre'] }}</td>
-                  <td class="vert-align" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">{{ result['subgenre'] }}</td>
+                  <td class="vert-align" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">{{ result['genre']+" | "+result['subgenre'] }}</td>
+                  <!-- <td class="vert-align" onclick="window.location='/itunes_id={{result['itunes_id']}}&offset=0';">{{ result['subgenre'] }}</td> -->
                 </tr>
                 <tr class="hide-table-padding">
-                  <td colspan="4" class="accordion-toggle collapsed"
+                  <td colspan="3" class="accordion-toggle collapsed"
                    id="accordion1_{{result['itunes_id']}}"
                    data-toggle="collapse"
                    data-parent="#accordion1_{{result['itunes_id']}}"
                    href="#collapseOne_{{result['itunes_id']}}"></td>
                 </tr>
                 <tr class="hide-table-padding">
-                  <td colspan="4">
+                  <td colspan="3">
                     <div class="collapse" id="collapseOne_{{result['itunes_id']}}">
                       <p class="text-justify">{{ result['description']}}</p>
                     </div>

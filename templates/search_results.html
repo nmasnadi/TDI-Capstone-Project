@@ -56,7 +56,7 @@
               <h4><b>{{table_title}}</b></hr>
               <h5 class="text-secondary">(select one to see similar podcasts)<h5>
               <tr><th></th><th>Title</th><th>Genre</th><th>Subgenre</th></tr>
-              {% for index, data in pod_recommendations[offset:offset+5].iterrows() %}
+              {% for index, data in pods[offset:offset+5].iterrows() %}
 
                 <tr class="clickable" onclick="window.location='/itunes_id={{data['itunes_id']}}&offset=0';">
                   <td class="vert-align">
@@ -88,7 +88,7 @@
             </li>
             {% endif %}
 
-            {% if offset < pod_recommendations|length-5 %}
+            {% if offset < pods|length-5 %}
             <li class="page-item">
               <a class="page-link" href="/term={{ search_term }}&offset={{ offset+5 }}">Next</a>
             </li>
