@@ -12,7 +12,7 @@ class SqlTable:
         else:
             conn = connect(os.environ['DATABASE_URL'], sslmode='require')
         self.cursor = conn.cursor()
-        self.itunes_url = "https://itunes.apple.com/search?entity=podcast&attribute=titleTerm&term="
+        self.plot_data = self.get_plotting_data()
 
     def pod_lookup(self, itunes_ids):
 
@@ -26,8 +26,8 @@ class SqlTable:
         return df
 
     def search_pod_by_keyword(self, key_word):
-
-        testUrl = self.itunes_url + key_word
+        itunes_url = "https://itunes.apple.com/search?entity=podcast&attribute=titleTerm&term="
+        testUrl = itunes_url + key_word
         r = requests.get(testUrl)
         res = json.loads(r.text)['results']
 
@@ -50,10 +50,6 @@ class SqlTable:
         idx = np.argsort(np.array(idx))
         df = df.loc[idx].reset_index(drop=True)
 
-        # exact_match = df[df["title"].apply(lambda x:x.lower()) == key_word.lower()]
-        # if not exact_match.empty:
-        #     return exact_match
-        
         return df
 
     def get_recommendations(self, itunes_id):

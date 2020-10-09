@@ -27,9 +27,9 @@ def index():
 def show_search_results(search_term, offset = 0):
     offset = int(offset)
     if search_term == "random_podcast":
-        pods = db.random_pod()
+        pods = db.random_pod(5)
         search_term = pods["title"]
-        table_title = "Random Suggestion"
+        table_title = "Random Suggestions"
     else:
         table_title = 'Search Results for "'+ search_term + '"'
         pods = db.search_pod_by_keyword(search_term)
@@ -45,9 +45,7 @@ def show_results_id(itunes_id, offset = 0):
     offset = int(offset)
     pod = db.pod_lookup([itunes_id])
     recs = db.get_recommendations(itunes_id)
-    plot_data = db.get_plotting_data()
-    # plot_script, plot_div = make_cluster_plot(plot_data, pod, recs[offset:offset+10])
-    plot_script, plot_div = make_cluster_plot(plot_data, pod, recs[offset:offset+10])
+    plot_script, plot_div = make_cluster_plot(db.plot_data, pod, recs[offset:offset+10])
 
     return render_template("results.html", \
         plot_script = plot_script, plot_div = plot_div, \
