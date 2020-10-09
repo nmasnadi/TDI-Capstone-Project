@@ -3,7 +3,7 @@ from searchDatabase import SqlTable
 from bokehPlot import make_cluster_plot
 import random
 
-db = SqlTable(local = True)
+db = SqlTable(local = False)
 pod_placeholders = ["Serial", "This American Life", \
     "Dr. Death", "Radiolab", "The Daily", \
     "Stuff You Should Know", "Planet Money from NPR", \
