@@ -89,7 +89,9 @@
           <img class="img-fluid rounded" src = "{{ pod['artwork_url'].item() | safe }}" alt="{{ pod['title'].item() | safe }}", width="150px">
           <h4><b>{{ pod['title'].item() }}</b></h4>
           <h5 class="text-secondary">{{ pod['genre'].item() }} | {{ pod['subgenre'].item() }}</h5>
-          <a class="btn btn-outline-primary" href="https://podcasts.apple.com/podcast/id{{ pod['itunes_id'].item() }}" role="button">Listen on iTunes</a>
+          <a class="btn btn-outline-primary" href="https://podcasts.apple.com/podcast/id{{ pod['itunes_id'].item() }}" target="_blank" role="button">
+            Listen on iTunes
+          </a>
         </div>
         <div class="col-md-8">
           <br>
