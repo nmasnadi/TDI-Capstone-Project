@@ -20,7 +20,7 @@ def index():
         return redirect(url_for('show_search_results', \
             search_term = key_word, offset = 0))
     else:
-        return render_template("index.html", \
+        return render_template("index2.html", \
             pod_placeholder = random.choice(pod_placeholders))
 
 @app.route('/term=<search_term>&offset=<offset>', methods=['GET', 'POST'])
