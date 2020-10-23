@@ -11,7 +11,7 @@ from bokeh.models import TapTool, CustomJS, CustomJSHover
 def make_cluster_plot(plot_data, pod, recs):
 
     # get x, y coordinates for pod and recs
-    main_pod = plot_data[plot_data['itunes_id'] == pod['itunes_id'][0]]
+    main_pod = pod.merge(plot_data, on=["title", "itunes_id", "genre", "subgenre"])
     recs = recs.merge(plot_data, on=["title", "itunes_id", "genre", "subgenre"])
 
     genre_list = list(plot_data.groupby(by="genre").groups.keys())
@@ -36,16 +36,32 @@ def make_cluster_plot(plot_data, pod, recs):
         if g not in show_list: # only show genres that are in the recommendations
             group[g].muted = True
 
+    # plot the main podcast
+    p.image_url(url="artwork_url", x="x", y="y", w=50, h = 50, \
+        anchor="center", global_alpha = 0.8, \
+        h_units = "screen", w_units = "screen",\
+        source = ColumnDataSource(main_pod))
+    p.rect(main_pod['x'], main_pod['y'], width = 52, height = 52, \
+        line_width = 3, height_units="screen", width_units="screen", \
+        fill_alpha = 0, line_color = "red")
     # plot the recommendations on the current page
     recs_source = ColumnDataSource(recs)
-    rend_main = p.hex('x', 'y', fill_color = 'ivory', line_color = "royalblue", \
-        line_width = 3, size = 15, \
-        fill_alpha = 1, source = recs_source)
+    rend_main = p.rect('x', 'y', width = 18, height = 18, \
+        line_width = 2, height_units="screen", width_units="screen", \
+        fill_alpha = 0, line_color = "royalblue", source = recs_source)
+    p.image_url(url="artwork_url", x="x", y="y", w=16, h=16, \
+        anchor="center", h_units="screen", w_units="screen",\
+        source=recs_source)
+
+    # plot the recommendations on the current page
+    # rend_main = p.hex('x', 'y', fill_color = 'ivory', line_color = "royalblue", \
+    #     line_width = 3, size = 15, \
+    #     fill_alpha = 1, source = recs_source)
     # plot the main podcast
-    p.circle(main_pod['x'], main_pod['y'], color = "red", size = 5)
-    p.circle(main_pod['x'], main_pod['y'], fill_color = "red", \
-        fill_alpha = 0.2, radius = 10, line_color = "red", \
-        line_alpha = 0.2)
+    # p.circle(main_pod['x'], main_pod['y'], color = "red", size = 5)
+    # p.circle(main_pod['x'], main_pod['y'], fill_color = "red", \
+    #     fill_alpha = 0.2, radius = 10, line_color = "red", \
+    #     line_alpha = 0.2)
 
     custom_hover = HoverTool(mode="mouse", point_policy="snap_to_data", \
         muted_policy = "ignore", renderers = [rend_main])
