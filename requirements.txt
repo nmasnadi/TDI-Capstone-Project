@@ -1,6 +1,6 @@
 gunicorn==19.9.0
 flask==1.1.1
-requests==2.22.0
+requests==2.31.0
 json5==0.9.1
 bokeh==2.2.1
 numpy==1.18.1
